@@ -2,24 +2,27 @@ var express = require('express');
 var session = require('express-session');
 var bodyParser = require('body-parser');
 var app = express();
-var sqlConnect=require('./sqlConnect.js')
+//var sqlConnect=require('./sqlConnect.js')
 var mongojs=require('mongojs');
 var db=mongojs('authDb',['userValidation'])
 
-var mysql = require('mysql');
 
-var con = mysql.createConnection({
-  host: "192.168.1.104",
-  user: "root",
-  database:'vishwas',
-  password: "Vishwas@1234"
-    })
-
-con.connect(function(err) {
-    if (err) throw err
-
-});
-
+const port=process.env.PORT || 3000;
+console.log(port);
+// var mysql = require('mysql');
+//
+// var con = mysql.createConnection({
+//   host: "192.168.1.104",
+//   user: "root",
+//   database:'vishwas',
+//   password: "Vishwas@1234"
+//     })
+//
+// con.connect(function(err) {
+//     if (err) throw err
+//
+// });
+//
 
 app.use(express.static(__dirname + '/views'));
 
@@ -219,27 +222,27 @@ console.log('outside the retrieve....');
 
 
 //get api to validate user authentication from sql databases
-app.get("/api/userValidate/:user",(req,res)=>{
-var user=req.params.user;
-console.log('user is'+user);
-query="select count(userName) as count from person where userName like " +"'" + user +"'";
-console.log(query);
-con.query(query, function (err, result, fields) {
-if (err) throw err;
-var ob=result[0];
-var count=ob['count'];
-console.log(count);
-if(parseInt(count)>=1){
-  res.send(200,'auth')
-}
-else{
-    res.send(401,'not auth')
-   }
-
-});
-
-});
-
+// app.get("/api/userValidate/:user",(req,res)=>{
+// var user=req.params.user;
+// console.log('user is'+user);
+// query="select count(userName) as count from person where userName like " +"'" + user +"'";
+// console.log(query);
+// con.query(query, function (err, result, fields) {
+// if (err) throw err;
+// var ob=result[0];
+// var count=ob['count'];
+// console.log(count);
+// if(parseInt(count)>=1){
+//   res.send(200,'auth')
+// }
+// else{
+//     res.send(401,'not auth')
+//    }
+//
+// });
+//
+// });
+//
 
 app.get("/:id",(req,res)=>{
 var id=req.params.id// IDEA: ;
@@ -249,6 +252,6 @@ console.log('id is.. '+id);
 
 
 //creating server---
-app.listen(3000,function(){
-console.log("App Started on PORT 3000");
+app.listen(port,function(){
+console.log(`App Started on PORT ${ port }`);
 });
